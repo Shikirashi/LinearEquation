@@ -4,8 +4,12 @@ using UnityEngine;
 public class Parser : MonoBehaviour {
 	// Start is called before the first frame update
 	LinearEquationCalculator LEC;
+	CramersRule cramers;
+	GaussJordan gauss;
 	void Start() {
 		LEC = GetComponent<LinearEquationCalculator>();
+		cramers = GetComponent<CramersRule>();
+		gauss = GetComponent<GaussJordan>();
 		ParseFile();
 	}
 
@@ -40,6 +44,8 @@ public class Parser : MonoBehaviour {
 				}
 			}
 		}
-		LEC.GetMatrix(multiArray);
+		//LEC.GetMatrix(multiArray);
+		//cramers.GrabMatrix(multiArray);
+		gauss.GrabMatrix(multiArray);
 	}
 }
