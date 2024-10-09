@@ -14,14 +14,13 @@ public class GaussJordan : MonoBehaviour {
 	}
 	void DisplayMatrix(float[,] matrix) {
 		for (int i = 0; i < matrix.GetLength(0); i++) {
-			for (int j = 0; j < matrix.GetLength(1); j++) {
-				Debug.Log(matrix[i, j]);
-			}
+			Debug.Log(matrix[i, matrix.GetUpperBound(1)]);
 		}
 	}
 
 	public void GrabMatrix(float[,] matrix) {
 		this.matrix = matrix;
+		Debug.Log("Gauss Jordan");
 		if (Solve(this.matrix)) {
 			Debug.Log("solved");
 		}

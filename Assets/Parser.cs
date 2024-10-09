@@ -45,7 +45,7 @@ public class Parser : MonoBehaviour {
 			}
 		}
 		//LEC.GetMatrix(multiArray);
-		//cramers.GrabMatrix(multiArray);
+		cramers.GrabMatrix(multiArray);
 		gauss.GrabMatrix(multiArray);
 	}
 }

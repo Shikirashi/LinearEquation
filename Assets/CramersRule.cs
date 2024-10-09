@@ -19,6 +19,7 @@ public class CramersRule : MonoBehaviour {
 
 	public void GrabMatrix(float[,] matrix) {
 		//DisplayMatrix(matrix);
+		Debug.Log("Cramer's Rule");
 		Solve(matrix, matrix.GetLength(0));
 	}
 
