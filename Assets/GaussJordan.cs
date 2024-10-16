@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class GaussJordan : MonoBehaviour {
@@ -12,73 +11,90 @@ public class GaussJordan : MonoBehaviour {
 	void Update() {
 
 	}
-	void DisplayMatrix(float[,] matrix) {
-		for (int i = 0; i < matrix.GetLength(0); i++) {
-			Debug.Log(matrix[i, matrix.GetUpperBound(1)]);
+	void DisplayMatrix(float[,] m) {
+		Debug.Log("Displaying matrices");
+		for (int i = 0; i < m.GetLength(0); i++) {
+			int alphabet = 65;
+			string output = "";
+			for (int j = 0; j < m.GetLength(1); j++) {
+				char character = (char)alphabet;
+				if (j == m.GetUpperBound(1)) {
+					output += "=" + m[i, j];
+				}
+				else if (j != 0) {
+					if (m[i, j] == 1 || m[i, j] == -1) {
+						output += "+" + character.ToString();
+					}
+					else if (m[i, j] > 0) {
+						output += "+" + m[i, j] + character.ToString();
+					}
+					else {
+						output += m[i, j] + character.ToString();
+					}
+				}
+				else {
+					if (m[i, j] == 1 || m[i, j] == -1) {
+						output += character.ToString();
+					}
+					else {
+						output += m[i, j] + character.ToString();
+					}
+				}
+				alphabet++;
+			}
+			Debug.Log(output);
 		}
 	}
 
 	public void GrabMatrix(float[,] matrix) {
 		this.matrix = matrix;
 		Debug.Log("Gauss Jordan");
-		if (Solve(this.matrix)) {
-			Debug.Log("solved");
-		}
-		else {
-			Debug.Log("no solution");
-		}
 		DisplayMatrix(this.matrix);
+		Solve(this.matrix);
 	}
-	static bool Solve(float[,] M) {
-		// input checks
-		int rowCount = M.GetUpperBound(0) + 1;
-		if (M == null || M.Length != rowCount * (rowCount + 1))
-			throw new ArgumentException("The algorithm must be provided with a (n x n+1) matrix.");
-		if (rowCount < 1)
-			throw new ArgumentException("The matrix must at least have one row.");
+	void NormalizeRow(float[,] matrix, int row) {
+		float divisor = matrix[row, row];
+		for (int j = 0; j < matrix.GetLength(1); j++) {
+			matrix[row, j] /= divisor;
+		}
+	}
+	void SubtractRow(float[,] matrix, int targetRow, int sourceRow) {
+		float factor = matrix[targetRow, sourceRow];
+		for (int j = 0; j < matrix.GetLength(1); j++) {
+			matrix[targetRow, j] -= factor * matrix[sourceRow, j];
+		}
+	}
+	void Solve(float[,] matrix) {
+		int n = matrix.GetLength(0);
 
-		// pivoting
-		for (int col = 0; col + 1 < rowCount; col++) {
-			// check for zero coefficients
-			if (M[col, col] == 0) {
-				Debug.Log("Found zero");
-				// find non-zero coefficient
-				int swapRow = col + 1;
-				for (; swapRow < rowCount; swapRow++) {
-					if (M[swapRow, col] != 0) break;
-				}
+		for (int i = 0; i < n; i++) {
+			// Make the diagonal contain all 1s
+			NormalizeRow(matrix, i);
 
-				if (M[swapRow, col] != 0) {
-					// found a non-zero coefficient?
-					// yes, then swap it with the above
-					float[] tmp = new float[rowCount + 1];
-					for (int i = 0; i < rowCount + 1; i++) {
-						tmp[i] = M[swapRow, i];
-						M[swapRow, i] = M[col, i];
-						M[col, i] = tmp[i];
-					}
+			// Make the other rows contain 0s
+			for (int j = 0; j < n; j++) {
+				if (j != i) {
+					SubtractRow(matrix, j, i);
 				}
-				else return false; // no, then the matrix has no unique solution
 			}
 		}
-		// elimination
-		for (int sourceRow = 0; sourceRow + 1 < rowCount; sourceRow++) {
-			for (int destRow = sourceRow + 1; destRow < rowCount; destRow++) {
-				float df = M[sourceRow, sourceRow];
-				float sf = M[destRow, sourceRow];
-				for (int i = 0; i < rowCount + 1; i++)
-					M[destRow, i] = M[destRow, i] * df - M[sourceRow, i] * sf;
-			}
+		Debug.Log("Matrix size 0 is: " + matrix.GetLength(0));
+		Debug.Log("Matrix size 1 is: " + matrix.GetLength(1));
+		// Display the result
+		int alphabet = 65;
+		Debug.Log("Displaying answer");
+		for (int i = 0; i < n; i++) {
+			Debug.Log((char)alphabet + " = " + matrix[i, n]);
+			alphabet++;
 		}
+	}
 
-		// back-insertion
-		for (int row = rowCount - 1; row >= 0; row--) {
-			float f = M[row, row];
-			if (f == 0) return false;
-
-			for (int i = 0; i < rowCount + 1; i++) M[row, i] /= f;
-			for (int destRow = 0; destRow < row; destRow++) { M[destRow, rowCount] -= M[destRow, row] * M[row, rowCount]; M[destRow, row] = 0; }
+	void DisplayConstants(float[] m) {
+		Debug.Log("Displaying constants");
+		int alphabet = 65;
+		for (int i = 0; i < m.Length; i++) {
+			Debug.Log((char)alphabet + " = " + m[i]);
+			alphabet++;
 		}
-		return true;
 	}
 }

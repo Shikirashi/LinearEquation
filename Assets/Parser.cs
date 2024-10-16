@@ -18,7 +18,7 @@ public class Parser : MonoBehaviour {
 
 	}
 	void ParseFile() {
-		string text = File.ReadAllText("equation.txt");
+		string text = File.ReadAllText("equation10.txt");
 		Debug.Log(text);
 		char[] separator = { ';' };
 		char[] separator2 = { ' ' };
@@ -45,7 +45,7 @@ public class Parser : MonoBehaviour {
 			}
 		}
 		//LEC.GetMatrix(multiArray);
-		cramers.GrabMatrix(multiArray);
+		//cramers.GrabMatrix(multiArray);
 		gauss.GrabMatrix(multiArray);
 	}
 }
